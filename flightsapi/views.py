@@ -21,13 +21,27 @@ def import_json(request):
             agent_rating = itineraries_data['agent_rating']
         )
         
-        #itinerarie_legs = itineraries_data['legs']
-        #for itle in itinerarie_legs:
-        #    itinerarie_leg = itineraries_legs(
-        #        itineraries = itinerarie,
-        #        legs = itle
-        #    )
-        #itinerarie_leg.save()
+        itinerarie_legs = itineraries_data['legs']
+        for itle in itinerarie_legs:
+            for leg in data_legs:
+                if leg['id'] == itle:
+                    itin_leg = legs(
+                        id = leg['id'],
+                        departure_airport = leg['departure_airport'],
+                        arrival_airport = leg['arrival_airport'],
+                        departure_time = leg['departure_time'],
+                        arrival_time = leg['arrival_time'],
+                        stops = leg['stops'],
+                        airline_name = leg['airline_name'],
+                        airline_id = leg['airline_id'],
+                        duration_mins = leg['duration_mins']
+                    )
+            itinerarie_leg = itineraries_legs(
+                itineraries = itinerarie,
+                legs = itin_leg
+            )
+            itinerarie_leg.save()
+        
         itinerarie.save()
 
     for legs_data in data_legs:
