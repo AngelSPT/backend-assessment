@@ -9,6 +9,8 @@ class itineraries(models.Model):
     agent = models.CharField(max_length=100)
     agent_rating = models.DecimalField(max_digits=10, decimal_places=2)
 
+    def __str__(self):
+        return self.id
 
 # Model Legs - These are journeys (outbound, return) with duration, stops and airlines.
 class legs(models.Model):
@@ -22,8 +24,13 @@ class legs(models.Model):
     airline_id = models.CharField(max_length=100)
     duration_mins = models.IntegerField()
 
+    def __str__(self):
+        return self.id
 
 # Model itineraries_legs - Relationship between itineraries and legs
 class itineraries_legs(models.Model):
     itineraries = models.ForeignKey(itineraries, on_delete=models.CASCADE)
     legs = models.ForeignKey(legs, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.itineraries} - {self.legs}"

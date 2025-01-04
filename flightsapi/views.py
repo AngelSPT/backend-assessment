@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import requests
 from .models import itineraries, legs, itineraries_legs
+from .serializers import itinerariesSerializer, legsSerializer, itineraries_legsSerializer
 
 
 @api_view(['GET'])
@@ -59,3 +60,23 @@ def import_json(request):
         leg.save()
 
     return Response(data)
+
+@api_view(['GET'])
+def flights_list(request):
+    itineraries_list = itineraries.objects.all()
+    legs_list = legs.objects.all()
+    itineraries_legs_list = itineraries_legs.objects.all()
+    
+    itineraries_serializer = itinerariesSerializer(itineraries_list, many=True)
+    legs_serializer = legsSerializer(legs_list, many=True)
+    itineraries_legs_serializer = itineraries_legsSerializer(itineraries_legs_list, many=True)
+    flights_list = {}
+    
+    for itinerary in itineraries_serializer.data:
+        for leg in itineraries_legs_serializer.data:
+            if leg['itineraries'] == itinerary['id']:
+                itinerary['legs'] = leg
+        flights_list[itinerary['id']] = itinerary
+    
+    
+    return Response(flights_list)
