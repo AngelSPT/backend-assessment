@@ -1,6 +1,7 @@
 from rest_framework import routers
-from django.urls import path, include
+from django.urls import path, include, re_path
 from .api import itinerariesViewSet, legsViewSet, itineraries_legsViewSet
+from .views import import_json
 
 router = routers.DefaultRouter()
 
@@ -9,3 +10,8 @@ router.register('api/legs', legsViewSet, 'legs')
 router.register('api/itinerarieslegs', itineraries_legsViewSet, 'itinerarieslegs')
 
 urlpatterns = router.urls
+
+
+urlpatterns += [
+    re_path('api/import', import_json, name='import_json'),
+]
